@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dhiaz Syamriafahdi Portofolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root { color-scheme: light; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    /* Smooth section reveal */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn { animation: fadeIn .85s ease both; }
+
+    /* Skill bar animation */
+    .skill-bar { transition: width 1.5s ease-in-out; }
+
+    /* ========= 1) GLASS / GRADIENT BACKGROUND ========= */
+    .blue-glass-section {
+      position: relative;
+      overflow: hidden;
+    }
+    .blue-glass-section::before {
+      content: "";
+      position: absolute;
+      inset: -120px -120px -120px -120px;
+      background:
+        radial-gradient(800px 500px at 15% 10%, rgba(0,78,137,.28), transparent 60%),
+        radial-gradient(700px 450px at 90% 25%, rgba(0,78,137,.20), transparent 55%),
+        linear-gradient(135deg, rgba(0,78,137,.10), rgba(255,255,255,0));
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blue-glass-section > * { position: relative; z-index: 1; }
+
+    .glass-card {
+      background: linear-gradient(135deg, rgba(0,78,137,.14), rgba(255,255,255,.72));
+      border: 1px solid rgba(0,78,137,.14);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+
+    .section-surface {
+      background: rgba(255,255,255,.70);
+      border: 1px solid rgba(255,255,255,.18);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+
+    /* ========= 2) IMAGE SLIDER (Activities) ========= */
+    .slider { position: relative; }
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity .8s ease-in-out;
+    }
+    .slide.active { opacity: 1; }
+
+    /* ========= 3) VIDEO SLIDER ========= */
+    .video-slider {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.15);
+      background: linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 320px;
+    }
+    @media (min-width: 640px) { .video-slider { min-height: 380px; } }
+    @media (min-width: 1024px) { .video-slider { min-height: 520px; } }
+
+    .video-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: translateX(18px);
+      transition: opacity .7s ease, transform .7s ease;
+      pointer-events: none;
+    }
+    .video-slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .video-slide video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-slider.fit-contain .video-slide video { object-fit: contain; background: rgba(0,0,0,.18); }
+    .video-slider.fit-cover .video-slide video { object-fit: cover; }
+    .video-slider.fit-auto .video-slide video { object-fit: contain; background: rgba(0,0,0,.18); }
+
+    .video-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 2;
+    }
+    .video-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.45);
+      border: 1px solid rgba(255,255,255,.55);
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .video-dot.active {
+      background: rgba(255,255,255,.92);
+      transform: scale(1.15);
+    }
+
+    /* Video progress bar */
+    .video-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(255,255,255,.14);
+      z-index: 3;
+    }
+    .video-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: rgba(255,255,255,.92);
+      transition: width .06s linear;
+    }
+
+    /* Divider between left and right in contact */
+    .soft-divider { position: relative; }
+    .soft-divider::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -20px;
+      width: 1px;
+      background: rgba(255,255,255,.18);
+      display: none;
+    }
+    @media (min-width: 1024px) { .soft-divider::before { display: block; } }
+
+    /* Small pill buttons */
+    .chip-btn {
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.10);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      line-height: 1;
+      transition: transform .15s ease, background .15s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .chip-btn:hover { background: rgba(255,255,255,.16); transform: translateY(-1px); }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      background: rgba(0,0,0,.70);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 60;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* Scroll progress bar */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: rgba(255,107,53,.95);
+      z-index: 70;
+      transition: width .08s linear;
+    }
+
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      right: 18px;
+      bottom: 70px;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.85);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 24px rgba(0,0,0,.10);
+      display: grid;
+      place-items: center;
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 65;
+    }
+    .back-to-top.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Active nav */
+    .nav-link.active {
+      color: #FF6B35 !important;
+      position: relative;
+    }
+    .nav-link.active::after {
+      content: "";
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 4px;
+      height: 2px;
+      background: rgba(255,107,53,.9);
+      border-radius: 99px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+    }
+  </style>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FF6B35',
+            secondary: '#004E89'
+          }
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // ===== Scroll progress + Back to top =====
+      const progressEl = document.getElementById('scrollProgress');
+      const backToTop = document.getElementById('backToTop');
+
+      const onScroll = () => {
+        const doc = document.documentElement;
+        const scrollTop = doc.scrollTop || document.body.scrollTop;
+        const scrollHeight = doc.scrollHeight - doc.clientHeight;
+        const pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        if (progressEl) progressEl.style.width = pct + '%';
+
+        if (backToTop) {
+          if (scrollTop > 650) backToTop.classList.add('show');
+          else backToTop.classList.remove('show');
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      if (backToTop) {
+        backToTop.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      // ===== Fade-in on scroll =====
+      const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('animate-fadeIn');
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+      // ===== Animate skill bars when About section appears =====
+      const skillsWrap = document.querySelector('#about');
+      const animateSkills = () => {
+        document.querySelectorAll('.skill-bar').forEach(skill => {
+          const width = skill.getAttribute('data-percent');
+          skill.style.width = width;
+        });
+      };
+      if (skillsWrap) {
+        const skillsObserver = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              animateSkills();
+              skillsObserver.disconnect();
+            }
+          });
+        }, { threshold: 0.25 });
+        skillsObserver.observe(skillsWrap);
+      } else {
+        animateSkills();
+      }
+
+      // ===== Mobile menu toggle + auto-close on click =====
+      const menuBtn = document.getElementById('menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+        mobileMenu.querySelectorAll('a[href^="#"]').forEach(a => {
+          a.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+      }
+
+      // ===== Active nav link (IntersectionObserver) =====
+      const navLinks = Array.from(document.querySelectorAll('a.nav-link[href^="#"]'));
+      const sectionMap = navLinks
+        .map(a => {
+          const id = a.getAttribute('href');
+          const el = document.querySelector(id);
+          return el ? { id, el } : null;
+        })
+        .filter(Boolean);
+
+      const setActive = (id) => {
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
+      };
+
+      if (sectionMap.length) {
+        const navObserver = new IntersectionObserver((entries) => {
+          const visible = entries
+            .filter(e => e.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (visible && visible.target && visible.target.id) {
+            setActive('#' + visible.target.id);
+          }
+        }, { threshold: [0.2, 0.35, 0.5], rootMargin: '-20% 0px -55% 0px' });
+
+        sectionMap.forEach(s => navObserver.observe(s.el));
+
+        const first = sectionMap.find(s => s.id === '#home');
+        if (first) setActive(first.id);
+      }
+
+      // ===== Smooth scroll (offset for fixed nav) =====
+      const navHeight = document.querySelector('nav')?.offsetHeight || 64;
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href');
+          const target = document.querySelector(id);
+          if (!target) return;
+          e.preventDefault();
+          const y = target.getBoundingClientRect().top + window.pageYOffset - navHeight + 2;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        });
+      });
+
+      // ===== Slider otomatis untuk semua image slider .slider (Campus Activities) =====
+      const sliders = document.querySelectorAll(".slider");
+      sliders.forEach(slider => {
+        const slides = slider.querySelectorAll(".slide");
+        if (!slides.length) return;
+
+        let index = 0;
+        setInterval(() => {
+          slides[index].classList.remove("active");
+          index = (index + 1) % slides.length;
+          slides[index].classList.add("active");
+        }, 3000);
+      });
+
+      // ===== Video slider otomatis + keyboard nav + progress =====
+      const videoWrap = document.querySelector('.video-slider');
+      const videoSlides = document.querySelectorAll('.video-slide');
+      const videoDots = document.querySelectorAll('.video-dot');
+
+      const titleEl = document.getElementById('videoTitle');
+      const descEl = document.getElementById('videoDesc');
+      const progressBar = document.getElementById('videoProgressBar');
+
+      const SLIDE_DURATION = 5000;
+
+      // Fit controls
+      const fitAutoBtn = document.getElementById('fitAutoBtn');
+      const fitContainBtn = document.getElementById('fitContainBtn');
+      const fitCoverBtn = document.getElementById('fitCoverBtn');
+
+      const setFitMode = (mode) => {
+        if (!videoWrap) return;
+
+        videoWrap.classList.remove('fit-auto', 'fit-contain', 'fit-cover');
+        videoWrap.classList.add(mode);
+
+        // clear inline objectFit when leaving auto
+        if (mode !== 'fit-auto') {
+          videoSlides.forEach(s => {
+            const v = s.querySelector('video');
+            if (v) v.style.objectFit = '';
+          });
+        }
+
+        try { localStorage.setItem('videoFitMode', mode); } catch {}
+      };
+
+      const applyAutoFitForActive = () => {
+        if (!videoWrap) return;
+        if (!videoWrap.classList.contains('fit-auto')) return;
+
+        const activeSlide = document.querySelector('.video-slide.active');
+        const vid = activeSlide?.querySelector('video');
+        if (!vid) return;
+
+        const w = vid.videoWidth || 0;
+        const h = vid.videoHeight || 0;
+        if (!w || !h) return;
+
+        vid.style.objectFit = (w >= h) ? 'cover' : 'contain';
+      };
+
+      if (fitAutoBtn && fitContainBtn && fitCoverBtn) {
+        fitAutoBtn.addEventListener('click', () => setFitMode('fit-auto'));
+        fitContainBtn.addEventListener('click', () => setFitMode('fit-contain'));
+        fitCoverBtn.addEventListener('click', () => setFitMode('fit-cover'));
+
+        try {
+          const saved = localStorage.getItem('videoFitMode');
+          if (saved === 'fit-contain' || saved === 'fit-cover' || saved === 'fit-auto') setFitMode(saved);
+          else setFitMode('fit-auto');
+        } catch {
+          setFitMode('fit-auto');
+        }
+      }
+
+      // Meta (title/desc) updater
+      const updateVideoMeta = (index) => {
+        const slide = videoSlides[index];
+        if (!slide) return;
+
+        const t = slide.getAttribute('data-title') || 'Videos Demonstration';
+        const d = slide.getAttribute('data-desc') || '';
+
+        if (titleEl) titleEl.textContent = t;
+        if (descEl) descEl.textContent = d;
+      };
+
+      // Progress bar controller (rAF)
+      let progressRAF = null;
+      let progressStart = 0;
+      let progressPausedElapsed = 0;
+      let isProgressPaused = false;
+
+      const setProgress = (pct) => {
+        if (!progressBar) return;
+        const clamped = Math.max(0, Math.min(100, pct));
+        progressBar.style.width = clamped + '%';
+      };
+
+      const stopProgressRAF = () => {
+        if (progressRAF) cancelAnimationFrame(progressRAF);
+        progressRAF = null;
+      };
+
+      const startProgressRAF = () => {
+        stopProgressRAF();
+        isProgressPaused = false;
+        const tick = (now) => {
+          const elapsed = now - progressStart;
+          const pct = (elapsed / SLIDE_DURATION) * 100;
+          setProgress(pct);
+          progressRAF = requestAnimationFrame(tick);
+        };
+        progressRAF = requestAnimationFrame(tick);
+      };
+
+      const resetProgress = () => {
+        progressPausedElapsed = 0;
+        progressStart = performance.now();
+        setProgress(0);
+        startProgressRAF();
+      };
+
+      const pauseProgress = () => {
+        if (isProgressPaused) return;
+        isProgressPaused = true;
+        progressPausedElapsed = performance.now() - progressStart;
+        stopProgressRAF();
+      };
+
+      const resumeProgress = () => {
+        if (!isProgressPaused) return;
+        isProgressPaused = false;
+        progressStart = performance.now() - progressPausedElapsed;
+        startProgressRAF();
+      };
+
+      // Video slider logic
+      if (videoSlides.length > 0) {
+        let vIndex = 0;
+        let vTimer = null;
+
+        const activateVideo = (newIndex) => {
+          videoSlides.forEach((s, i) => {
+            const vid = s.querySelector('video');
+            const isActive = i === newIndex;
+
+            s.classList.toggle('active', isActive);
+            if (videoDots[i]) videoDots[i].classList.toggle('active', isActive);
+
+            if (vid) {
+              if (isActive) {
+                vid.currentTime = 0;
+                vid.play().catch(() => {});
+                if (vid.readyState >= 1) applyAutoFitForActive();
+                else vid.addEventListener('loadedmetadata', applyAutoFitForActive, { once: true });
+              } else {
+                vid.pause();
+              }
+            }
+          });
+
+          updateVideoMeta(newIndex);
+          vIndex = newIndex;
+          resetProgress();
+        };
+
+        const startVideoAuto = () => {
+          if (vTimer) clearInterval(vTimer);
+          vTimer = setInterval(() => {
+            activateVideo((vIndex + 1) % videoSlides.length);
+          }, SLIDE_DURATION);
+        };
+
+        const stopVideoAuto = () => {
+          if (vTimer) clearInterval(vTimer);
+          vTimer = null;
+        };
+
+        // dots click
+        videoDots.forEach((dot, i) => {
+          dot.addEventListener('click', () => {
+            activateVideo(i);
+            startVideoAuto();
+          });
+        });
+
+        // hover pause
+        if (videoWrap) {
+          videoWrap.addEventListener('mouseenter', () => {
+            stopVideoAuto();
+            pauseProgress();
+          });
+          videoWrap.addEventListener('mouseleave', () => {
+            startVideoAuto();
+            resumeProgress();
+          });
+        }
+
+        // keyboard navigation (← →)
+        const isTypingElement = (el) => {
+          if (!el) return false;
+          const tag = el.tagName ? el.tagName.toLowerCase() : '';
+          return tag === 'input' || tag === 'textarea' || tag === 'select' || el.isContentEditable;
+        };
+
+        document.addEventListener('keydown', (e) => {
+          if (!videoSlides.length) return;
+          if (isTypingElement(document.activeElement)) return;
+
+          if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            const prev = (vIndex - 1 + videoSlides.length) % videoSlides.length;
+            activateVideo(prev);
+            startVideoAuto();
+          }
+
+          if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            const next = (vIndex + 1) % videoSlides.length;
+            activateVideo(next);
+            startVideoAuto();
+          }
+        });
+
+        // init
+        activateVideo(0);
+        startVideoAuto();
+      }
+
+      // ===== Copy to clipboard + toast =====
+      const toast = document.getElementById('toast');
+      const showToast = (msg) => {
+        if (!toast) return;
+        toast.textContent = msg || 'Copied!';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1400);
+      };
+
+      document.querySelectorAll('[data-copy]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const targetSel = btn.getAttribute('data-copy');
+          const targetEl = document.querySelector(targetSel);
+          const text = targetEl ? targetEl.textContent.trim() : '';
+          if (!text) return;
+
+          try {
+            await navigator.clipboard.writeText(text);
+            showToast('Copied to clipboard');
+          } catch {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast('Copied to clipboard');
+          }
+        });
+      });
+    });
+  </script>
+</head>
+
+<body class="bg-white text-gray-800">
+  <div id="scrollProgress" class="scroll-progress"></div>
+
+  <button id="backToTop" class="back-to-top" type="button" aria-label="Back to top">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+  </button>
+
+  <div id="toast" class="toast">Copied!</div>
+
+  <!-- Navigation -->
+  <nav class="bg-white/90 backdrop-blur-md shadow-md fixed w-full z-10">
+    <div class="max-w-screen-xl mx-auto px-4">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex-shrink-0 flex items-center">
+          <span class="text-xl font-bold text-primary">Dhiaz Syamriafahdi<span class="text-secondary"> Portofolio</span></span>
+        </div>
+
+        <div class="hidden md:flex space-x-8">
+          <a href="#home" class="nav-link text-gray-800 hover:text-primary px-3 py-2 font-medium">Home</a>
+          <a href="#about" class="nav-link text-gray-800 hover:text-primary px-3 py-2 font-medium">About</a>
+          <a href="#activities" class="nav-link text-gray-800 hover:text-primary px-3 py-2 font-medium">Activities</a>
+          <a href="#research" class="nav-link text-gray-800 hover:text-primary px-3 py-2 font-medium">Research</a>
+          <a href="#contact" class="nav-link text-gray-800 hover:text-primary px-3 py-2 font-medium">Contact</a>
+        </div>
+
+        <div class="md:hidden">
+          <button id="menu-btn" class="text-gray-800 hover:text-primary focus:outline-none" aria-label="Toggle navigation menu">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <a href="#home" class="nav-link text-gray-800 hover:text-primary block px-3 py-2 font-medium">Home</a>
+        <a href="#about" class="nav-link text-gray-800 hover:text-primary block px-3 py-2 font-medium">About</a>
+        <a href="#activities" class="nav-link text-gray-800 hover:text-primary block px-3 py-2 font-medium">Activities</a>
+        <a href="#research" class="nav-link text-gray-800 hover:text-primary block px-3 py-2 font-medium">Research</a>
+        <a href="#contact" class="nav-link text-gray-800 hover:text-primary block px-3 py-2 font-medium">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="pt-32 pb-20 px-4 bg-gray-50 blue-glass-section">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="flex flex-col md:flex-row items-center gap-10">
+        <div class="md:w-1/2 fade-in">
+          <div class="section-surface p-8 rounded-2xl shadow-lg">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+              Hi, I'm <span class="text-primary"> Dhiaz Syamriafahdi, S.Pd </span>
+            </h1>
+            <h2 class="text-2xl md:text-3xl font-semibold text-secondary mb-6">Electrical Engineering Student</h2>
+            <p class="text-gray-700 mb-8 max-w-lg">
+              I am a fresh graduate of the Bachelor’s program in Electrical Engineering Education from Yogyakarta State University (UNY), class of 2021–2025, with a GPA of 3.41. During my study I was actively involved in research and competitions related to energy-efficient vehicles, electric vehicle conversion, and control and power electronics, which strengthened my analytical skills, AI Engineer, Programable Logic Control, PCB Design, and ability to work in multidisciplinary engineering teams.
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href="#contact" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-md font-medium transition">Contact Me</a>
+              <a href="#research" class="border border-primary text-primary hover:bg-primary/10 px-6 py-3 rounded-md font-medium transition">View Research</a>
+              <a href="#freelance" class="border border-secondary text-secondary hover:bg-secondary/10 px-6 py-3 rounded-md font-medium transition">Freelance</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:w-1/2 flex justify-center fade-in">
+          <div class="relative">
+            <div class="w-64 h-64 md:w-80 md:h-80 bg-primary rounded-full absolute -right-4 -top-4 -z-10"></div>
+            <div class="w-64 h-64 md:w-80 md:h-80 bg-secondary rounded-full absolute -left-4 -bottom-4 -z-10"></div>
+            <img src="imagess\profil.jpg" alt="Professional portrait of an electrical engineering student wearing formal attire with university background" class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-2xl shadow-xl relative" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-20 px-4 bg-gray-50 blue-glass-section">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="text-center mb-16 fade-in">
+        <h2 class="text-3xl font-bold mb-4 text-gray-800">About Me</h2>
+        <div class="w-20 h-1 bg-primary mx-auto"></div>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-10">
+        <div class="md:w-1/3 fade-in">
+          <div class="section-surface p-6 rounded-2xl shadow-md">
+            <h3 class="text-xl font-semibold mb-4 text-secondary">Education</h3>
+            <div class="space-y-4">
+              <div>
+                <h4 class="font-medium">Bachelor of Electrical Engineering Education</h4>
+                <p class="text-gray-600">University State Yogyakarta</p>
+                <p class="text-gray-500 text-sm">2021 - 2025</p>
+              </div>
+              <div>
+                <h4 class="font-medium">GPA: 3.42/4.0</h4>
+                <p class="text-gray-600">Major in Electrical Engineering Education</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:w-2/3 fade-in">
+          <div class="section-surface p-6 rounded-2xl shadow-md">
+            <h3 class="text-xl font-semibold mb-6 text-secondary">Technical Skills</h3>
+            <div class="space-y-6">
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">Automation (PLC/Zelio)</span>
+                  <span>95%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                  <div class="skill-bar h-2.5 rounded-full bg-primary" data-percent="95%" style="width:0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">Embedded Systems (Arduino, ESP32, & STM32)</span>
+                  <span>90%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                  <div class="skill-bar h-2.5 rounded-full bg-primary" data-percent="90%" style="width:0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">Motorsolve by: Siemens</span>
+                  <span>76%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                  <div class="skill-bar h-2.5 rounded-full bg-primary" data-percent="90%" style="width:0%"></div>
+                </div>
+              </div>
+
+               <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">IBM AMOS & SPSS</span>
+                  <span>80%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                  <div class="skill-bar h-2.5 rounded-full bg-primary" data-percent="90%" style="width:0%"></div>
+                </div>
+              </div>
+
+
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">MATLAB & Simulink</span>
+                  <span>85%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                  <div class="skill-bar h-2.5 rounded-full bg-primary" data-percent="85%" style="width:0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">AI Engineer (ML/DL)</span>
+                  <span>80%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                  <div class="skill-bar h-2.5 rounded-full bg-primary" data-percent="80%" style="width:0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">PCB Design (KiCad)</span>
+                  <span>75%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                  <div class="skill-bar h-2.5 rounded-full bg-primary" data-percent="75%" style="width:0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="font-medium">Proteus/LABview Programing</span>
+                  <span>80%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                  <div class="skill-bar h-2.5 rounded-full bg-primary" data-percent="80%" style="width:0%"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Campus Activities -->
+  <section id="activities" class="py-20 px-4 bg-gray-50 blue-glass-section">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="text-center mb-10 fade-in">
+        <h2 class="text-3xl font-bold mb-4 text-gray-800">Campus Activities</h2>
+        <div class="w-20 h-1 bg-primary mx-auto"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Activity 1 -->
+        <div class="rounded-2xl shadow-md overflow-hidden fade-in glass-card">
+          <div class="h-56 md:h-64 lg:h-72 relative overflow-hidden slider">
+            <img src="imagess/fesc.jpg" class="slide active" alt="Activity image 1" />
+            <img src="imagess/garuda.jpeg" class="slide" alt="Activity image 2" />
+            <img src="imagess/reward_fesc.jpeg" class="slide" alt="Activity image 3" />
+            <img src="imagess/FESC 2022.jpg" class="slide" alt="Activity image 4" />
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-secondary">
+              General Champion Formula Electric Student Competition Indonesia International Motor Show 2022
+            </h3>
+
+            <p class="text-gray-600 mb-4">
+              Go down to the field to compete and perform scrutineering on the formula vehicles before the competition.
+            </p>
+
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Electrical Engineering</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Automotive Electrical</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Teamwork</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Electrical Design Schematics</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity 2 -->
+        <div class="rounded-2xl shadow-md overflow-hidden fade-in glass-card">
+          <div class="h-56 md:h-64 lg:h-72 relative overflow-hidden slider">
+            <img src="imagess/sem2022.jpg" class="slide active" alt="Activity image 1" />
+            <img src="imagess/sem_ontrack.jpeg" class="slide" alt="Activity image 2" />
+            <img src="imagess/rewardsem2022.jpeg" class="slide" alt="Activity image 3" />
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-secondary">
+              1st Place On Track Program Shell Eco-marathon 2022
+            </h3>
+
+            <p class="text-gray-600 mb-4">
+              Received an award for contributions in vehicle design, fabrication, and testing, achieving an energy efficiency of 544.2 km/l in the Urban Concept ICE category.
+            </p>
+
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Electrical Engineering</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Automotive Electrical</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">MATLAB/Simulink</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Electrical Design Schematics</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity 3 -->
+        <div class="rounded-2xl shadow-md overflow-hidden fade-in glass-card">
+          <div class="h-56 md:h-64 lg:h-72 relative overflow-hidden slider">
+            <img src="imagess/ppatk.jpeg" class="slide active" alt="Activity image 1" />
+            <img src="imagess/Hackathon.jpg" class="slide" alt="Activity image 2" />
+            <img src="imagess/hackthon.jpeg" class="slide" alt="Activity image 3" />
+            <img src="imagess/presentasi.jpeg" class="slide" alt="Activity image 4" />
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-secondary">
+              Finalists TrackAML Hackathon 2023
+            </h3>
+
+            <p class="text-gray-600 mb-4">
+              I was a finalist in the TRACKAML Hackathon 2023 organized by PPATK (May 30–31, 2023, Pusdiklat APUPPT PPATK). I presented an innovation combining Fraud Detection and Ensemble Learning on AML & terrorism financing indicators for anomaly analysis on transaction data from a PPATK case study.
+            </p>
+
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Data analysis</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">ML Engineer</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Risk-AML</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Data Scientist</span>
+            </div>
+          </div>
+        </div>
+
+         <!-- Activity 4 -->
+        <div class="rounded-2xl shadow-md overflow-hidden fade-in glass-card">
+          <div class="h-56 md:h-64 lg:h-72 relative overflow-hidden slider">
+            <img src="imagess\Presma2023.jpg" class="slide active" alt="Activity image 1" />
+            <img src="imagess\presma2024.jpg" class="slide" alt="Activity image 2" />
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-secondary">
+              Outstanding Student in Reasoning (2023 & 2024) – Yogyakarta State University
+            </h3>
+
+            <p class="text-gray-600 mb-4">
+              Through the Outstanding Student in Reasoning Awards received in 2023 and 2024 from Yogyakarta State University, I acquired experience in enhancing scientific reasoning abilities, critical thinking skills, and consistency in both research-oriented academic and non-academic accomplishments. 
+            </p>
+
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Data analysis</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">ML Engineer</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Risk-AML</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Data Scientist</span>
+            </div>
+          </div>
+        </div>
+
+         <!-- Activity 5-->
+        <div class="rounded-2xl shadow-md overflow-hidden fade-in glass-card">
+          <div class="h-56 md:h-64 lg:h-72 relative overflow-hidden slider">
+            <img src="imagess\dokumentasi.png" class="slide active" alt="Activity image 1" />
+            <img src="imagess\DD.png" class="slide" alt="Activity image 2" />
+            <img src="imagess\image.png" class="slide" alt="Activity image 3" />
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-secondary">
+              Speaker Youth Inspiraction Camp
+            </h3>
+
+            <p class="text-gray-600 mb-4">
+             Received an award for contributing knowledge, experience, and insights shared with participants of the Youth Ekselensia Scholarship program, organized by LPI Dompet Dhuafa, as part of a youth development initiative.
+            </p>
+
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Public Speaking</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Career</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Scholarship</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Sharing</span>
+            </div>
+          </div>
+        </div>
+
+         <!-- Activity 6 -->
+        <div class="rounded-2xl shadow-md overflow-hidden fade-in glass-card">
+          <div class="h-56 md:h-64 lg:h-72 relative overflow-hidden slider">
+            <img src="imagess\PKMKC.jpg" class="slide active" alt="Activity image 1" />
+            <img src="imagess\schematic.jpeg" class="slide" alt="Activity image 2" />
+            <img src="imagess\desain.jpeg" class="slide" alt="Activity image 3" />
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-secondary">
+              Student Creativity Program Competition (PKMC) 2022 | 2nd Place FE UNY National
+            </h3>
+
+            <p class="text-gray-600 mb-4">
+              Achieved the title of Second Best in the 2022 UNY Faculty of Economics Student Creativity Competition (PKMC) through the development of creative ideas and applied research focused on strengthening student capacity in the field of economics, with an emphasis on critical thinking, innovation, and the implementation of impactful programs.
+            </p>
+
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Data analysis</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">ML Engineer</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Risk-AML</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Data Scientist</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity 7 -->
+        <div class="rounded-2xl shadow-md overflow-hidden fade-in glass-card">
+          <div class="h-56 md:h-64 lg:h-72 relative overflow-hidden slider">
+            <img src="imagess/report.jpg" class="slide active" alt="Activity image 1" />
+            <img src="imagess/kelas.jpg" class="slide" alt="Activity image 2" />
+            <img src="imagess/uthmppt.jpg" class="slide" alt="Activity image 3" />
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-secondary">
+              UTHM x UNY Student Exchange (Project Management) — 29 July 2023.
+            </h3>
+
+            <p class="text-gray-600 mb-4">
+              Learned core project management skills: collaborative problem-solving, needs assessment, and data-driven decision-making. Completed an individual F&B business proposal (product overview, market analysis with supporting data, conclusion, and references) for an Indonesian company.
+            </p>
+
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Project management fundamentals</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Market research & needs assessment</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Data-driven decision making</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Presentation & communication</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity 8 -->
+        <div class="rounded-2xl shadow-md overflow-hidden fade-in glass-card">
+          <div class="h-56 md:h-64 lg:h-72 relative overflow-hidden slider">
+            <img src="imagess/serkom1.jpeg" class="slide active" alt="Activity image 1" />
+            <img src="imagess/serkom2.jpeg" class="slide" alt="Activity image 2" />
+            <img src="imagess/serkom.png" class="slide" alt="Activity image 3" />
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-secondary">
+              BNSP Competency Certificate — PLC Automation Industrial Electrical Installation | August 9, 2024
+            </h3>
+
+            <p class="text-gray-600 mb-4">
+              Competent in electrical measurements, PLC program commissioning, electric motor control, inspection of field devices (sensors/actuators/motors), and applying OHS (K3) principles in electrical installation and maintenance.
+            </p>
+
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Automation</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">PLC Programming</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">PLC operation & commissioning</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Electrical Wiring</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">K3</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity 9 -->
+        <div class="rounded-2xl shadow-md overflow-hidden fade-in glass-card">
+          <div class="h-56 md:h-64 lg:h-72 relative overflow-hidden slider">
+            <img src="imagess/iceelinvo1.png" class="slide active" alt="Activity image 1" />
+            <img src="imagess/iceelinvo2.png" class="slide" alt="Activity image 2" />
+            <img src="imagess/iceelinvo2.jpg" class="slide" alt="Activity image 3" />
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-secondary">
+              Conference Presenter – 5th International Conference on Electrical, Electronics, Informatics, and Vocational Education (ICE-ELINVO)
+            </h3>
+
+            <p class="text-gray-600 mb-4">
+              Design Optimization Analysis on the Performance of BLDC Motors on Electric Bicycles
+            </p>
+            <p class="text-gray-600 mb-4">
+              Analysis of the Potential of Renewable Energy in Fulfilling Home Electrical Loads and Charging Systems for Electric Motorcycles in Yogyakarta
+            </p>
+
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Public speaking</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Technical Communication</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">International Conference</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Research Section -->
+  <section id="research" class="py-20 px-4 bg-gray-50 blue-glass-section">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="text-center mb-16 fade-in">
+        <h2 class="text-3xl font-bold mb-4 text-gray-800">Research & Projects</h2>
+        <div class="w-20 h-1 bg-primary mx-auto"></div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-10">
+        <!-- Research 1 -->
+        <div class="rounded-2xl overflow-hidden shadow-md fade-in glass-card">
+          <div class="h-68 w-full">
+            <img src="imagess\ATS.jpeg"
+              alt="ATS-AMF Student Project Trainer"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-4">
+              <div class="bg-primary text-white p-2 rounded-md mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-secondary">ATS-AMF Student Project Trainer</h3>
+            </div>
+            <p class="text-gray-700 mb-4">This project involves designing an Automatic Transfer Switch (ATS) and Automatic Mains Failure (AMF) system to ensure uninterrupted power by automatically switching between PLN (main power) and a backup genset. Developed with Pak Giri Wiyono, S.T., M.T. from Universitas Negeri Yogyakarta (UNY) and SMK Muhammadiyah Prambanan, the system features automatic load transfer, power failure detection, and protection mechanisms.</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Electrical Wiring</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">ELectrical Design</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Power & Control Systems</span>
+            </div>
+            <a href="#" class="https://drive.google.com/file/d/1UzrkrvOhCN3YqHC83xpymRgj0-CfHxXz/view?usp=sharing">View Project &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Research 2 -->
+        <div class="rounded-2xl overflow-hidden shadow-md fade-in glass-card">
+          <div class="h-68 w-full">
+            <img src="imagess\Ucupruk.jpeg"
+              alt="IoT energy monitoring device"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-4">
+              <div class="bg-primary text-white p-2 rounded-md mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-secondary">UCPRUK Disability Community Service Programm w/ Autochem x UNY. </h3>
+            </div>
+            <p class="text-gray-700 mb-4">Community service activities, especially among people with disabilities. Development of battery-powered electric wheelchairs organized by UNY in collaboration with Autochem Indonesia. These activities include education and assembly of electric motors for wheelchairs. project ini di dampingi oleh dosen pak I Wayan Adiyasa, M.Eng.</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Electrical Control</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Electrical Wiring </span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Electrical Design</span>
+            </div>
+            <a href="#" class="https://www.instagram.com/reel/Chb7cu5jPh5/">View Project &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Research 3 -->
+        <div class="rounded-2xl overflow-hidden shadow-md fade-in glass-card">
+          <div class="h-78 w-full">
+            <img src="imagess\Controller.jpeg"
+              alt="Power line fault detection"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-4">
+              <div class="bg-primary text-white p-2 rounded-md mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-secondary">SimpleFOC BLDC 3 Phase Research</h3>
+            </div>
+            <p class="text-gray-700 mb-4">Research on the 3-phase BLDC controller at the Garuda UNY Student Activity Unit (UKM) aims to develop a controller using the SimpleFOC algorithm with an STM32 Nucleo microcontroller. Preliminary results show that the controller successfully operates on a 3-phase BLDC with a voltage range of 36-48V and a maximum current of 10A. This project is ongoing and has not yet been used in any official competition.</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Electronics</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Embedded System</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">SimpleFOC</span>
+            </div>
+            <a href="#" class="text-primary font-medium hover:underline">See the Research in the Video Below &rarr;</a>
+          </div>
+        </div>
+
+         <!-- Research 4 -->
+        <div class="rounded-2xl overflow-hidden shadow-md fade-in glass-card">
+          <div class="h-78 w-full">
+            <img src="imagess\motorsolve.jpeg"
+              alt="Power line fault detection"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-4">
+              <div class="bg-primary text-white p-2 rounded-md mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-secondary">Analysis Performance Motor by: Siemens Motorsolve</h3>
+            </div>
+            <p class="text-gray-700 mb-4">This project involves the use of Motorsolve software to design and analyze brushless DC (BLDC) motors. The main focus is to optimize the stator windings, coil configuration, and thermal management to improve motor performance. Key parameters such as winding resistance, coil layout, and material selection are defined to ensure efficient operation and good thermal management. This software also supports motor performance visualization and testing through simulation.</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Design and Simulation</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Stator and Winding Analysis</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Electric Motor Fundamentals</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Thermal Management:</span>
+            </div>
+            <a href="#" class="text-primary font-medium hover:underline">See the Research in the Video Below &rarr;</a>
+          </div>
+        </div>
+
+         <!-- Research 5 -->
+        <div class="rounded-2xl overflow-hidden shadow-md fade-in glass-card">
+          <div class="h-78 w-full">
+            <img src="imagess\dicoding.png"
+              alt="Power line fault detection"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-4">
+              <div class="bg-primary text-white p-2 rounded-md mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-secondary">Dicoding AI Engineer Learning Project (Skilled)</h3>
+            </div>
+            <p class="text-gray-700 mb-4"> Applied Machine Learning course at Dicoding Academy. This course covers the application of machine learning in fields such as predictive analytics, sentiment analysis, computer vision, and recommendation systems, accompanied by practical projects and 80 hours of learning. This certificate is valid until November 2028.</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Predictive Analytics</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Sentiment Analysis</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Jupiter</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">python</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Machine Learning</span>
+            </div>
+            <a href="#" class="text-primary font-medium hover:underline">See the Research in the Video Below &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Research 6 -->
+        <div class="rounded-2xl overflow-hidden shadow-md fade-in glass-card">
+          <div class="h-78 w-full">
+            <img src="imagess\Smk2.jpeg"
+              alt="Wearable health monitoring prototype"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-4">
+              <div class="bg-primary text-white p-2 rounded-md mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-secondary">Final Project Praktik Kependidikan (PK)</h3>
+            </div>
+            <p class="text-gray-700 mb-4">Production of ATS-AMF Automatic Transfer Switch - Automatic Main Failure Panel as a Learning Medium for TKL Students at SMKN 2 Pangkalpinang. During my work, I was assisted by Mr. M. Habiburrakhman, S.Tr.T.</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Education </span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Electrical Wiring</span>
+              <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">Power System</span>
+            </div>
+            <a href="#" class="https://drive.google.com/file/d/1xcttQEgxwH-LYh39aDe0cgslj1Xf3kW1/view?usp=sharing">View Project &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Freelance Projects Section -->
+  <section id="freelance" class="py-16 px-4 bg-gray-50 blue-glass-section">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="text-center mb-12 fade-in">
+        <h2 class="text-3xl font-bold mb-4 text-gray-800">Freelance Projects</h2>
+        <div class="w-20 h-1 bg-primary mx-auto"></div>
+        <p class="mt-4 text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
+          A selection of freelance and project-based work in electrical engineering, embedded systems, and technical education.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="rounded-2xl overflow-hidden shadow-md fade-in glass-card">
+          <div class="h-60 w-full bg-gray-200">
+            <img src="imagess\telmetry.jpeg"
+              alt="Telemetry PCB design on a workbench with tools"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-lg font-semibold text-secondary mb-2">Data Acquisition and Telemetry Project</h3>
+            <p class="text-gray-700 text-sm mb-4">
+              DeData Acquisition and Telemetry is the final project I worked on. It started with schematic design and 3D PCB visualization. After that, I calibrated the sensors and checked the data logger. This telemetry is used to measure several parameters on an electric-based prototype vehicle.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">Data Acquisition</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">PCB Design</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">ESP32</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">Telemetry</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-2xl overflow-hidden shadow-md fade-in glass-card">
+          <div class="h-60 w-full bg-gray-200">
+            <img src="imagess\pcb.jpeg"
+              alt="Wearable device prototype being tested"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-lg font-semibold text-secondary mb-2">PCB Design</h3>
+            <p class="text-gray-700 text-sm mb-4">
+              Mentored and assisted in developing microcontroller-based wearable prototypes, including wiring, basic firmware, sensor integration, and testing in school environments for student projects.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">KiCad</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">Prototyping</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">3D Design</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-2xl overflow-hidden shadow-md fade-in glass-card">
+          <div class="h-60 w-full bg-gray-200">
+            <img src="imagess\matlab.jpeg"
+              alt="ATS–AMF practicum panel and worksheet"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-lg font-semibold text-secondary mb-2">Matlab/Simulink Tutor</h3>
+            <p class="text-gray-700 text-sm mb-4">
+             PID control system simulation using MATLAB/Simulink to control water level and flow. This model uses an ultrasonic sensor for water level, a flowmeter for flow, and a temperature sensor to monitor system conditions. With PID tuner settings, the system response is optimized for efficient control. 
+            </p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">MATLAB Programming</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">System Modeling and Simulation</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">PID control</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-2xl overflow-hidden shadow-md fade-in glass-card">
+          <div class="h-60 w-full bg-gray-200">
+            <img src="imagess\AMOS.png"
+              alt="Electric motor drive prototype test bench"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-lg font-semibold text-secondary mb-2">IBM (AMOS & SPSS) Tutor</h3>
+            <p class="text-gray-700 text-sm mb-4">
+              Applied Machine Learning course at Dicoding Academy. This course covers the application of machine learning in fields such as predictive analytics, sentiment analysis, computer vision, and recommendation systems, accompanied by practical projects and 80 hours of learning. This certificate is valid until November 2028.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">Structural Equation Modeling</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">Confirmatory Factor Analysis</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">Partial Least Squares Structural Equation Modeling</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-2xl overflow-hidden shadow-md fade-in glass-card">
+          <div class="h-60 w-full bg-gray-200">
+            <img src="imagess\stem.png"
+              alt="Screen recording tutorial for MATLAB Simulink"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-lg font-semibold text-secondary mb-2">STEM Mentor</h3>
+            <p class="text-gray-700 text-sm mb-4">
+             As a mentor for students participating in STEM (Science, Technology, Electronics, Mathematics) competitions such as OPSI/YISF/I2ASPO, etc. Guiding students to create innovative works and scientific papers as well as good and appropriate presentation techniques.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">Presentation</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">Public Speaking</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">Writing</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-2xl overflow-hidden shadow-md fade-in glass-card">
+          <div class="h-60 w-full bg-gray-200">
+            <img src="imagess\website.png"
+              alt="Practicum video recording for electrical installation"
+              class="w-full h-full object-cover">
+          </div>
+          <div class="p-6">
+            <h3 class="text-lg font-semibold text-secondary mb-2">Website Design</h3>
+            <p class="text-gray-700 text-sm mb-4">
+              As a designer of portfolio websites, SMEs, and school profiles that can be developed according to the desired needs and style themes and user-friendliness, it can certainly be deployed locally and publicly hosted.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">HTML</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">Canva</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">VSCode</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">User Interface</span>
+              <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">CSS</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-12 px-4 bg-secondary text-white blue-glass-section">
+    <div class="max-w-screen-xl mx-auto px-2 sm:px-4">
+      <div class="mb-8 fade-in text-left">
+        <h2 class="text-3xl font-bold mb-2">Get In Touch</h2>
+        <div class="w-16 h-1 bg-primary"></div>
+        <p class="mt-3 text-white/70 max-w-2xl">
+          Feel free to reach out for collaboration, projects, or opportunities.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-6 gap-10 items-start">
+        <!-- LEFT SIDE (Info + Form) -->
+        <div class="lg:col-span-3 fade-in">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <!-- Contact Information -->
+            <div>
+              <h3 class="text-xl font-semibold mb-6">Contact Information</h3>
+
+              <div class="space-y-6">
+                <!-- Email -->
+                <div class="flex items-start">
+                  <div class="bg-primary p-2 rounded-md mr-4 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <h4 class="font-medium">Email</h4>
+                    <div class="flex flex-wrap items-center gap-2 mt-1">
+                      <p id="emailText" class="text-white/90 break-all min-w-0 flex-1">
+                        dhiazsyamriafahdi.2021@student.uny.ac.id
+                      </p>
+                      <button type="button" class="chip-btn shrink-0 sm:ml-auto" data-copy="#emailText">Copy</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="flex items-start">
+                  <div class="bg-primary p-2 rounded-md mr-4 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <h4 class="font-medium">Phone</h4>
+                    <div class="flex flex-wrap items-center gap-2 mt-1">
+                      <p id="phoneText" class="text-white/90 break-all min-w-0 flex-1">
+                        +6283802314246
+                      </p>
+                      <button type="button" class="chip-btn shrink-0 sm:ml-auto" data-copy="#phoneText">Copy</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Location -->
+                <div class="flex items-start">
+                  <div class="bg-primary p-2 rounded-md mr-4 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-medium">Location</h4>
+                    <p class="text-white/90">Electrical Engineering<br>[Jl. Rajawali, Gatak, Tamantirto]<br>[Yogyakarta, Indonesia]</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-10">
+                <h3 class="text-xl font-semibold mb-6">Connect With Me</h3>
+                <div class="flex space-x-4">
+                  <a href="#" class="bg-white text-secondary hover:bg-white/90 p-3 rounded-full" aria-label="LinkedIn profile">
+                    <svg xmlns="www.linkedin.com/in/dhiaz-syamriafahdi-257870221" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                  </a>
+                  <a href="#" class="bg-white text-secondary hover:bg-white/90 p-3 rounded-full" aria-label="GitHub profile">
+                    <svg xmlns="https://github.com/unyftpte" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                  </a>
+                  <a href="#" class="bg-white text-secondary hover:bg-white/90 p-3 rounded-full" aria-label="Instagram profile">
+                    <svg xmlns="https://www.instagram.com/dhhiiaz/" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form -->
+            <div>
+              <h3 class="text-xl font-semibold mb-6">Send Me a Message</h3>
+
+              <form class="space-y-6">
+                <div>
+                  <label for="name" class="block mb-2 font-medium">Name</label>
+                  <input type="text" id="name"
+                    class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white placeholder-white/50"
+                    placeholder="Your name">
+                </div>
+
+                <div>
+                  <label for="email" class="block mb-2 font-medium">Email</label>
+                  <input type="email" id="email"
+                    class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white placeholder-white/50"
+                    placeholder="your.email@example.com">
+                </div>
+
+                <div>
+                  <label for="subject" class="block mb-2 font-medium">Subject</label>
+                  <input type="text" id="subject"
+                    class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white placeholder-white/50"
+                    placeholder="Message subject">
+                </div>
+
+                <div>
+                  <label for="message" class="block mb-2 font-medium">Message</label>
+                  <textarea id="message" rows="5"
+                    class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white placeholder-white/50"
+                    placeholder="Your message"></textarea>
+                </div>
+
+                <button type="submit"
+                  class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-md font-medium transition w-full md:w-auto">
+                  Send Message
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+
+
+          <p class="text-white/70 text-sm mt-3">
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black text-white py-8 px-4">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <span class="text-xl font-bold text-primary">Dhiaz Syamriafahdi<span class="text-white"> Profile</span></span>
+          <p class="text-gray-400 mt-2">© 2025 Dhiaz Syamriafahdi Profile. All rights reserved.</p>
+        </div>
+
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-primary transition">Privacy Policy</a>
+          <a href="#" class="text-gray-400 hover:text-primary transition">Terms of Service</a>
+          <a href="#home" class="text-gray-400 hover:text-primary transition">Back to Top</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

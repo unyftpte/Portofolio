@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  scroll-behavior: smooth;
+}
+
+.skill-bar {
+  transition: width 1.5s ease-in-out;
+}
+
+.bg-primary {
+  background-color: #FF6B35;
+}
+
+.bg-secondary {
+  background-color: #004E89;
+}
+
+.text-primary {
+  color: #FF6B35;
+}
+
+.text-secondary {
+  color: #004E89;
+}
+
+.text-gray-800 {
+  color: #2D3748;
+}
+
+.text-gray-600 {
+  color: #4A5568;
+}
+
+.text-gray-500 {
+  color: #6B7280;
+}
+
+.text-gray-400 {
+  color: #A0AEC0;
+}
+
+.bg-white {
+  background-color: #FFFFFF;
+}
+
+.bg-gray-50 {
+  background-color: #F7FAFC;
+}
+
+.bg-black {
+  background-color: #000000;
+}
+
+.rounded-md {
+  border-radius: 0.375rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-xl {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.transition {
+  transition: all 0.2s ease-in-out;
+}
+
+.hover\:bg-primary\:90:hover {
+  background-color: rgba(255, 107, 53, 0.9);
+}
+
+.hover\:bg-white\:90:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.focus\:outline-none:focus {
+  outline: none;
+}
+
+.focus\:ring-2:focus {
+  min-width: 2px;
+}
+
+.focus\:ring-primary:focus {
+  min-width: #FF6B35;
+}
+
+.placeholder-white\:50::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.hidden {
+  display: none;
+}
+
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
+}
+
+.animate-fadeIn {
+  opacity: 1;
+}
